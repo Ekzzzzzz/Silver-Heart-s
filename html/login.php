@@ -1,3 +1,11 @@
+<?php
+    session_start();
+
+    if(isset($_SESSION['usuario'])){
+        header("location: ../html/homepage.php");
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +15,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/estilos.css">
+    <link rel="stylesheet" href="../css/estilosLogin.css">
 </head>
 <body>
     <main>
@@ -28,14 +36,14 @@
             <!--Formulario de login y registro-->
             <div class="contenedor__login-register">
                 <!--login-->
-                <form action="" class="formulario__login">
+                <form action="../php/login_usuario_backend.php" method= "POST" class="formulario__login">
                     <h2>Iniciar sesión</h2>
-                    <input type="text" placeholder="Correo electrónico">
-                    <input type="password" placeholder="Contraseña">
+                    <input type="text" placeholder="Correo electrónico" name="correo">
+                    <input type="password" placeholder="Contraseña" name ="contrasena">
                     <button>Entrar</button>
                 </form>
                 <!--registro por método Post para que los datos en la url no se muestren-->
-                <form action="php/registro_usuario_backend.php" method= "POST" class="formulario__register">
+                <form action="../php/registro_usuario_backend.php" method= "POST" class="formulario__register">
                     <h2>Registrarse</h2>
                     <input type="text" placeholder="Nombre Completo" name="nombre_completo">
                     <input type="text" placeholder="Correo electrónico" name="correo">
@@ -47,6 +55,6 @@
         </div>
     </main>
 
-    <script src="assets/js/script.js"></script>    
+    <script src="../js/login.js"></script>    
 </body>
 </html>
