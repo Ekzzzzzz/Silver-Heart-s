@@ -1,10 +1,39 @@
 const pulseras = [
-    { nombre: "Pulsera de Cuero", precio: 24.99, fecha: "2024-10-12", imagen: "../images/bracelet-img.jpg"},
-    { nombre: "Pulsera de Plata", precio: 34.99, fecha: "2024-09-20", imagen: "../images/bracelet-img.jpg" },
-    { nombre: "Pulsera Personalizada", precio: 44.99, fecha: "2024-08-10", imagen: "../images/bracelet-img.jpg" },
-    { nombre: "Pulsera de Beads", precio: 19.99, fecha: "2024-10-05", imagen: "../images/bracelet-img.jpg" },
-    { nombre: "Pulsera con Charm", precio: 29.99, fecha: "2024-09-15", imagen: "../images/bracelet-img.jpg" },
-    { nombre: "Pulsera de Acero Inoxidable", precio: 39.99, fecha: "2024-08-01", imagen: "../images/bracelet-img.jpg" },
+    { 
+        nombre: "Pulsera minimalista de acero", 
+        precio: 30.00, 
+        material: "Acero inoxidable", 
+        personalizable: false, 
+        imagen: "https://i.pinimg.com/236x/1f/db/e8/1fdbe8afde2e37bf27688fd6cc911d6c.jpg" 
+    },
+    { 
+        nombre: "Pulsera de cuentas naturales", 
+        precio: 20.00, 
+        material: "Piedras naturales", 
+        personalizable: false, 
+        imagen: "https://i.pinimg.com/236x/e2/cf/29/e2cf29a98a9a1a66a5330a03590d51c2.jpg" 
+    },
+    { 
+        nombre: "Pulsera tejida con cierre ajustable", 
+        precio: 15.00, 
+        material: "Hilo encerado", 
+        personalizable: true, 
+        imagen: "https://i.pinimg.com/236x/2e/b9/a4/2eb9a420fdf6a03ddf1bf75eae65e272.jpg" 
+    },
+    { 
+        nombre: "Pulsera con dijes colgantes", 
+        precio: 35.00, 
+        material: "Plata y cristal", 
+        personalizable: false, 
+        imagen: "https://i.pinimg.com/474x/d3/f7/99/d3f799f619cff26a95afa7e61070da20.jpg" 
+    },
+    { 
+        nombre: "Pulsera trenzada con detalles dorados", 
+        precio: 40.00, 
+        material: "Cuero y latón", 
+        personalizable: false, 
+        imagen: "https://i.pinimg.com/236x/e5/40/49/e54049147acfbd3c8372db7887d90f29.jpg" 
+    }
 ];
 
 let carrito = JSON.parse(sessionStorage.getItem('carrito')) || []; // Carga el carrito desde sessionStorage
@@ -16,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function renderPulseras(pulseras) {
         cardsContainer.innerHTML = ''; // Limpia el contenedor
 
-        pulseras.forEach(pulsera => {
+        pulseras.forEach((pulsera, index) => {
             const card = `
                 <div class="col-md-3 mb-4">
                     <div class="card text-center">
@@ -34,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                             <!-- Botón Añadir al carrito -->
                             <button class="btn btn-secondary mt-3"  
-                                onclick="openModal('${pulsera.nombre}', ${pulsera.precio}, this)">
+                                onclick="openModal(${index})">
                                 <i class="bi bi-cart"></i> Comprar ahora
                             </button>
                         </div>
@@ -44,13 +73,14 @@ document.addEventListener('DOMContentLoaded', function () {
             cardsContainer.innerHTML += card;
         });
     }
+
     // Abre el modal con los detalles del producto
-    window.openModal = function (nombre, precio, button) {
-        // Actualiza el contenido del modal
-        document.getElementById('modalName').innerText = nombre; // Nombre del producto
-        document.getElementById('modalPrice').innerText = `Precio: S/${precio.toFixed(2)}`; // Precio
-        document.getElementById('modalDate').innerText = `Fecha: ${new Date().toLocaleDateString()}`; // Fecha actual (puedes cambiar esto según tu lógica)
-        document.getElementById('modalImage').src = "https://via.placeholder.com/150"; // Aquí puedes establecer una imagen predeterminada o cambiar la lógica para obtener la imagen real
+    window.openModal = function (index) {
+        const pulsera = pulseras[index]; // Obtiene la pulsera correspondiente
+        document.getElementById('modalName').innerText = pulsera.nombre; // Nombre del producto
+        document.getElementById('modalPrice').innerText = `Precio: S/${pulsera.precio.toFixed(2)}`; // Precio
+        document.getElementById('modalImage').src = pulsera.imagen; // Asigna la imagen al modal
+        document.getElementById('modalMaterial').src=pulsera.material;//Material
         document.getElementById('modalQuantity').innerText = 1; // Cantidad por defecto
 
         // Mostrar el modal
@@ -58,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Añadir evento al botón de confirmar compra
         document.getElementById('confirmPurchaseButton').onclick = function() {
-            alert("Compra de " + nombre + " realizada con éxito por un total de S/" + precio.toFixed(2));
+            alert("Compra de " + pulsera.nombre + " realizada con éxito por un total de S/" + pulsera.precio.toFixed(2));
             $('#customModal').modal('hide'); // Cierra el modal después de confirmar
         };
     };
@@ -73,7 +103,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Añade productos al carrito
     window.añadirAlCarrito = function (nombre, precio, button) {
-        window.location.href = "../html/ventanaEmergente.html";
         const cantidad = parseInt(button.parentElement.querySelector('.cantidad').textContent);
 
         // Verifica si ya existe en el carrito
